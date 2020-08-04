@@ -11,7 +11,7 @@ import {loader} from 'webpack';
 
 import {IOptions} from './options';
 import preProcessGLTFAsync from './preProcessGLTFAsync';
-import {checkFileWithRules, readFileBuffer, getMd5, getAssetType, emitFile, getCommonDir} from './utils';
+import {checkFileWithRules, readFileBuffer, getMd5, getAssetType, emitFile, getCommonDir, isWin} from './utils';
 import compressTextures, { ICompressTextureOptions } from './compressTextures';
 const gltfToGlb = require('./gltf2glb/gltfToGlb');
 
@@ -33,9 +33,9 @@ export default async function processGlTF(
   const fileName = path.basename(resourcePath, path.extname(resourcePath));
   console.log(`seinjs-gltf-loader: ${fileName}, ${compressTextureOpts.name}`);
 
-  let rootDir = (context.rootContext || (context as any).options.context) + '/';
+  let rootDir = (context.rootContext || (context as any).options.context) + (isWin ? '\\' : '/');
   let srcDir = path.dirname(resourcePath);
-  const commonDir = getCommonDir([srcDir, rootDir]) + '/';
+  const commonDir = getCommonDir([srcDir, rootDir], isWin ? '\\' : '/') + (isWin ? '\\' : '/');
   const tmp = path.parse(srcDir.replace(commonDir, ''));
   const distDir = tmp.dir;
 

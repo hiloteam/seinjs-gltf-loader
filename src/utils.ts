@@ -12,6 +12,8 @@ import * as cp from 'ncp';
 
 import { IOptions } from './options';
 
+export const isWin = process.platform === 'win32';
+
 export async function emitFile(
   context: loader.LoaderContext,
   options: IOptions,
